@@ -325,6 +325,9 @@ static void show_new_file(struct rev_info *revs,
 	unsigned dirty_submodule = 0;
 	struct index_state *istate = revs->diffopt.repo->index;
 
+	if (S_ISSPARSEDIR(new_file->ce_mode))
+		return;
+
 	/*
 	 * New file in the index: it might actually be different in
 	 * the working tree.
@@ -346,6 +349,9 @@ static int show_modified(struct rev_info *revs,
 	const struct object_id *oid;
 	unsigned dirty_submodule = 0;
 	struct index_state *istate = revs->diffopt.repo->index;
+
+	if (S_ISSPARSEDIR(new_entry->ce_mode))
+		return 0;
 
 	if (get_stat_data(istate, new_entry, &oid, &mode, cached, match_missing,
 			  &dirty_submodule, &revs->diffopt) < 0) {
